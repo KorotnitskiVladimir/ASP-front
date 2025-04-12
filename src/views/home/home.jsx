@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import { AppContext } from "../../AppContext";
 
 
 export default function Home() {
 
     const [categories, setCategories] = useState([]);
     const [topProducts, setTopProducts] = useState([]);
+    const {request} = useContext(AppContext);
 
-    const request = (url, conf) => new Promise((resolve, reject) => {
-        if(url.startsWith('/')){
-            url = "http://localhost:5089" + url;
-        }
-        fetch(url, conf)
-        .then(r => r.json())
-        .then(j => {
-            if(j.status.isOk) {
-                resolve(j.data);
-            }
-            else {
-                reject(j);
-            }
-        });
-    });
-    
     useEffect (() => {
         request("/api/category")
         .then(data => setCategories(data))
